@@ -1,10 +1,12 @@
+require('dotenv').config()
+
 const express = require('express')
 const mongoose = require('mongoose')
 const app = express()
 const Animal = require('./animal.controller')
 const port = 3000
 
-mongoose.connect('mongodb://localhost:27017/miapp')
+mongoose.set('strictQuery', false)
 
 app.use(express.json())
 
