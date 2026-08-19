@@ -89,11 +89,36 @@ const loadLoginTemplate = () => {
 	body.innerHTML = template
 }
 
+const addLoginListener = () => {
+	const loginForm = document.getElementById('login-form')
+	loginForm.onsubmit = async (e) => {
+		e.preventDefault()
+		const formData = new formData(loginForm)
+		const data = Object.fromEntries(formData.entries)
+
+		const response = await fetch('/login', {
+			method: 'POST',
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		})
+		const responseData = await response.text()
+		if (response.status >= 300) {
+			const errorNode = document.getElementById('error')
+			errorNode.innerHTML = responseData
+		} else {
+			console.log(responseData)
+		}
+	}
+}
+
 window.onload = () => {
 	const isLoggedIn = checkLogin()
 	if(isLoggedIn) {
 		animalsPage()
 	} else {
 		loadLoginTemplate()
+		addLoginListener()
 	}
 }
