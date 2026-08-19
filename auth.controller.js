@@ -12,7 +12,7 @@ const signToken = _id => {
 
 const findAndAssignUser = async (req, res, next) => {
     try {
-        const user = await User.findById(req.auth._id);
+        const user = await User.findById(req.user._id);
         if (!user) {
             return res.status(401).end();
         }
@@ -46,7 +46,24 @@ const Auth = {
             res.send(error.message);
         }
     },
-    register: async (req, res) => {},
+    register: async (req, res) => {
+        const { body } = req;
+        try {
+              const isUser = await User.findOne({ email: body.email });
+              if (isUser) {
+                res.send('User registered yet')
+              } else {
+                const salt = await bcrypt.genSalt()
+                const hashed = await bcrypt.hash(body.password, salt)
+                const user = await User.create({ email: body.email, password: hashed, salt })
+                
+                const signed = signToken(user._id)
+                res.send(signed)
+              }
+          } catch (error) {
+                res.status(500).send(error.message);
+        }
+    },
 }
 
 module.exports = { Auth, isAuthenticated };
