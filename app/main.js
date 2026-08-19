@@ -93,8 +93,8 @@ const addLoginListener = () => {
 	const loginForm = document.getElementById('login-form')
 	loginForm.onsubmit = async (e) => {
 		e.preventDefault()
-		const formData = new formData(loginForm)
-		const data = Object.fromEntries(formData.entries)
+		const formData = new FormData(loginForm)
+		const data = Object.fromEntries(formData.entries())
 
 		const response = await fetch('/login', {
 			method: 'POST',

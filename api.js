@@ -29,6 +29,16 @@ app.get('*', (req, res) => {
 	res.status(404).send('Esta página no existe :(')
 })
 
-app.listen(port, () => {
-	console.log('Arrancando la aplicación!')
-})
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => {
+        console.log('MongoDB conectado correctamente')
+
+        app.listen(port, () => {
+            console.log(`Aplicación arrancada en http://localhost:${port}`)
+        })
+    })
+    .catch((error) => {
+        console.error('Error conectando a MongoDB:')
+        console.error(error)
+        process.exit(1)
+    })
