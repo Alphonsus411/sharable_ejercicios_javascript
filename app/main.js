@@ -19,26 +19,66 @@ const loadInitialTemplate = () => {
 }
 
 const getAnimals = async () => {
-	const response = await fetch('/animals')
-	const animals = await response.json()
-	const template = animal => `
-		<li>
-			${animal.name} ${animal.type} <button data-id="${animal._id}">Eliminar</button>
-		</li>
-	`
+    const jwt = localStorage.getItem('jwt')
 
-	const animalList = document.getElementById('animal-list')
-	animalList.innerHTML = animals.map(animal => template(animal)).join('')
-	animals.forEach(animal => {
-		animalNode = document.querySelector(`[data-id="${animal._id}"]`)
-		animalNode.onclick = async e => {
-			await fetch(`/animals/${animal._id}`, {
-				method: 'DELETE',
-			})
-			animalNode.parentNode.remove()
-			alert('Eliminado con éxito')
-		}
-	})
+    if (!jwt) {
+        console.log('No hay token JWT')
+        return
+    }
+
+    const response = await fetch('/animals', {
+        headers: {
+            Authorization: jwt
+        }
+    })
+
+    if (!response.ok) {
+        console.error('Error obteniendo animales:', response.status)
+        return
+    }
+
+    const animals = await response.json()
+
+    const template = animal => `
+        <li>
+            ${animal.name} ${animal.type}
+            <button data-id="${animal._id}">
+                Eliminar
+            </button>
+        </li>
+    `
+
+    const animalList = document.getElementById('animal-list')
+
+    animalList.innerHTML = animals
+        .map(animal => template(animal))
+        .join('')
+
+    animals.forEach(animal => {
+        const animalNode = document.querySelector(
+            `[data-id="${animal._id}"]`
+        )
+
+        animalNode.onclick = async () => {
+            const response = await fetch(`/animals/${animal._id}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: jwt
+                }
+            })
+
+            if (!response.ok) {
+                console.error(
+                    'Error eliminando animal:',
+                    response.status
+                )
+                return
+            }
+
+            animalNode.parentNode.remove()
+            alert('Eliminado con éxito')
+        }
+    })
 }
 
 const addFormListener = () => {

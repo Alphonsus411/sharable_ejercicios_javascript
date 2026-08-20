@@ -11,6 +11,16 @@ mongoose.set('strictQuery', false)
 
 app.use(express.json())
 
+app.use((req, res, next) => {
+    console.log(
+        `[${req.method}] ${req.originalUrl}`,
+        '| Authorization:',
+        req.headers.authorization || 'SIN TOKEN'
+    )
+
+    next()
+})
+
 app.get('/animals', isAuthenticated, Animal.list)
 app.post('/animals', isAuthenticated, Animal.create)
 app.put('/animals/:id', isAuthenticated, Animal.update)
