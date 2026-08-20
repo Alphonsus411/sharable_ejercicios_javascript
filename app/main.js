@@ -68,11 +68,34 @@ const animalsPage = () => {
 	getAnimals()
 }
 
-const loadRegisterTemplate = () => {}
+const loadRegisterTemplate = () => {
+	const template = `
+		<h1>Register</h1>
+		<form id="register-form">
+			<div>
+				<label>Correo</label>
+				<input name="email" />
+			</div>
+			<div>
+				<label>Contraseña</label>
+				<input name="password" />
+			</div>
+			<button type="submit">Enviar</button>
+		</form>
+		<a href="#" id="login">Iniciar Sesion</a>
+		<div id="error"></div>
+	`
+
+	const body = document.getElementsByTagName('body')[0]
+	body.innerHTML = template
+}
+
 const addRegisterListener = () => {}
+
 const goToLoginListener = () => {}
 
 const registerPage = () => {
+	console.log("Página de Registro")
 	loadRegisterTemplate()
 	addRegisterListener()
 	goToLoginListener()
