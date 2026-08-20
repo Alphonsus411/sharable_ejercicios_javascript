@@ -90,7 +90,29 @@ const loadRegisterTemplate = () => {
 	body.innerHTML = template
 }
 
-const addRegisterListener = () => {}
+const addRegisterListener = () => {
+	const registerForm = document.getElementById('register-form')
+	registerForm.onsubmit = async (e) => {
+		e.preventDefault()
+		const formData = new FormData(registerForm)
+		const data = Object.fromEntries(formData.entries())
+
+		const response = await fetch('/register', {
+			method: 'POST',
+			body: JSON.stringify(data),
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		})
+		const responseData = await response.text()
+		if (response.status >= 300) {
+			const errorNode = document.getElementById('error')
+			errorNode.innerHTML = responseData
+		} else {
+			console.log(responseData)
+		}
+	}
+}
 
 const goToLoginListener = () => {}
 
