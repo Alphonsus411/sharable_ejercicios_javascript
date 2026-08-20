@@ -109,7 +109,8 @@ const addRegisterListener = () => {
 			const errorNode = document.getElementById('error')
 			errorNode.innerHTML = responseData
 		} else {
-			console.log(responseData)
+			localStorage.setItem('jwt', 'Bearer ${responseData}')
+			animalsPage()
 		}
 	}
 }
