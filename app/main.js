@@ -28,7 +28,7 @@ const getAnimals = async () => {
 
     const response = await fetch('/animals', {
         headers: {
-            Authorization: jwt
+            Authorization: localStorage.getItem('jwt')
         }
     })
 
@@ -63,7 +63,7 @@ const getAnimals = async () => {
             const response = await fetch(`/animals/${animal._id}`, {
                 method: 'DELETE',
                 headers: {
-                    Authorization: jwt
+                    Authorization: localStorage.getItem('jwt')
                 }
             })
 
@@ -93,7 +93,7 @@ const addFormListener = () => {
 			body: JSON.stringify(data),
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: jwt
+				Authorization: localStorage.getItem('jwt')
 			}
 		})
 		animalForm.reset()
@@ -222,7 +222,7 @@ const addLoginListener = () => {
 			const errorNode = document.getElementById('error')
 			errorNode.innerHTML = responseData
 		} else {
-			console.log(responseData)
+			localStorage.setItem(`jwt`, `Bearer ${responseData}` )
 		}
 	}
 }
