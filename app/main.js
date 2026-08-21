@@ -145,11 +145,12 @@ const addRegisterListener = () => {
 			}
 		})
 		const responseData = await response.text()
-		if (response.status >= 300) {
+
+		if (response.status >= 300 || responseData.split('.').length !== 3) {
 			const errorNode = document.getElementById('error')
 			errorNode.innerHTML = responseData
 		} else {
-			localStorage.setItem('jwt', 'Bearer ${responseData}')
+			localStorage.setItem('jwt', `Bearer ${responseData}`)
 			animalsPage()
 		}
 	}
