@@ -87,11 +87,13 @@ const addFormListener = () => {
 		e.preventDefault()
 		const formData = new FormData(animalForm)
 		const data = Object.fromEntries(formData.entries())
+		const jwt = localStorage.getItem('jwt')
 		await fetch('/animals', {
 			method: 'POST',
 			body: JSON.stringify(data),
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				Authorization: jwt
 			}
 		})
 		animalForm.reset()
