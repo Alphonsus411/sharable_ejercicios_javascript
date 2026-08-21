@@ -158,7 +158,14 @@ const addRegisterListener = () => {
 	}
 }
 
-const goToLoginListener = () => {}
+const goToLoginListener = () => {
+	const goToLogin = document.getElementById('login')
+
+	goToLogin.onclick = (e) => {
+		e.preventDefault()
+		loginPage()
+	}
+}
 
 const registerPage = () => {
 	console.log("Página de Registro")
@@ -168,6 +175,7 @@ const registerPage = () => {
 }
 
 const loginPage = () => {
+	console.log("Página de Login")
 	loadLoginTemplate()
 	addLoginListener()
 	goToRegisterListener()
@@ -217,12 +225,13 @@ const addLoginListener = () => {
 				'Content-Type': 'application/json',
 			}
 		})
-		const responseData = await response.text()
+		const responseData = await response.json()
 		if (response.status >= 300) {
 			const errorNode = document.getElementById('error')
 			errorNode.innerHTML = responseData
 		} else {
-			localStorage.setItem(`jwt`, `Bearer ${responseData}` )
+			localStorage.setItem(`jwt`, `Bearer ${responseData.token}` )
+			animalsPage()
 		}
 	}
 }
